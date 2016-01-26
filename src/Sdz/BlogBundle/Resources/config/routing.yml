@@ -1,0 +1,20 @@
+blog_accueil:
+    pattern:  /{page}
+    defaults: { _controller: BlogBundle:Default:index }
+blog_article_voir:
+    pattern:  /article/voir
+    defaults: { _controller: BlogBundle:Blog:voir }
+blog_article_ajouter:
+    pattern:  /article/ajouter
+    defaults: { _controller: BlogBundle:Blog:ajouter }
+blog_article_modifier:
+    pattern:  /article/modifier/{$id}
+    defaults: { _controller: BlogBundle:Blog:voir }
+    requirements:
+        id:   \d+
+blog_article_supprimer:
+    pattern:  /article/supprimer/{$id}
+    defaults: { _controller: BlogBundle:Blog:voir }
+    requirements:
+        id:     \d+
+
