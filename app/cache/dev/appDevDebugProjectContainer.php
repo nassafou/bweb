@@ -3299,7 +3299,7 @@ class appDevDebugProjectContainer extends Container
             'kernel.root_dir' => '/home/nassafou/www-deve/bweb/app',
             'kernel.environment' => 'dev',
             'kernel.debug' => true,
-            'kernel.name' => 'ap_',
+            'kernel.name' => 'app',
             'kernel.cache_dir' => '/home/nassafou/www-deve/bweb/app/cache/dev',
             'kernel.logs_dir' => '/home/nassafou/www-deve/bweb/app/logs',
             'kernel.bundles' => array(
