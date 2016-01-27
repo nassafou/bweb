@@ -3,47 +3,123 @@
 namespace Sdz\BlogBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sdz\BlogBundle\Form\ArticleType;
+
+use Sdz\BlogBundle\Entity\Article;
 
 class BlogController extends Controller
 {
     public function indexAction()
-    { 
-        $message  = ' Le test est bon ';
-        $text = ' abalo et afi http://yahoo.fr; https://gmail.fr';
-        $antispam = $this->container->get('sdz_blog.antispam');
-        
-        //Je pars du princpe que $text contient le text d'un message quelconque
-        
-        if ($antispam->isSpam($text))
-        {
-            throw new \Exception('Votre message a été détecté comme spam!  ');
-        }
-        
-        
-        return $this->render('BlogBundle:Blog:index.html.twig', array('message' => $message ));
-        
-    }
-    public function voirAction()
-    {
-        
-        
-        
-        return $this->render('BlogBundle:Blog:index.html.twig', array('articles' => $articles));
-        
-    }
-    public function  ajouterAction()
-    {
-        
-    }
-    public function modifierAction()
-    {
-        
-    }
-    public function supprimerAction()
     {
         
     }
     
+    public function ajouterAction()
+    {
+        
+        $message = '';
+        // entity
+        $em = $this->getDoctrine()->getManager();
+        
+        // objet
+        $article = new Article();
+        
+        
+        //form
+        $form = $this->createForm(new ArticleType, $article );
+        
+        $request = $this->get('request');
+        
+        // condition de validation
+        
+        if($request->getMethod() == 'POST')
+        {
+            // lier le formulaire et la requete
+            $form->bind($request);
+            
+            // vérification de la validité des données
+            
+            if($form->isValid())
+            {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($article);
+                $em->flush();
+                
+                $message = 'Article bien enrégistré';
+                
+                return $this->render('BlogBundle:Blog:ajouter.html.twig', array('message' => $message,
+                                                                                'form' => $form->createView()));
+                
+            }
+            
+        }
+        
+        return $this->render('BlogBundle:Blog:ajouter.html.twig', array('form' => $form->createView(),
+                                                                        'message' => $message));
+        
+        
+        
+        
+        
+        
+    }
+    
+    public function modifierAction($id)
+    {
+        $message = '';
+        // entity
+        $em = $this->getDoctrine()->getManager();
+        
+        // objet
+        $article = new Article();
+        
+        
+        //form
+        $form = $this->createForm(new ArticleType, $article );
+        
+        $repository = $this->getRepository('BlogBundle:Article')
+                           ->find($i);
+        
+        // condition de validation
+        
+        if($request->getMethod() == 'POST')
+        {
+            // lier le formulaire et la requete
+            $form->bind($request);
+            
+            // vérification de la validité des données
+            
+            if($form->isValid())
+            {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($article);
+                $em->flush();
+                
+                $message = 'Article bien enrégistré';
+                
+                return $this->render('BlogBundle:Blog:ajouter.html.twig', array('message' => $message,
+                                                                                'form' => $form->createView()));
+                
+            }
+            
+        }
+        
+        return $this->render('BlogBundle:Blog:ajouter.html.twig', array('form' => $form->createView(),
+        
+        
+        
+    }
+    
+    public function voirAction($id)
+    {
+        
+        
+    }
+    
+    public function supprimerAction()
+    {
+        
+    }
     
     
     

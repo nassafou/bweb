@@ -2,8 +2,10 @@ blog_accueil:
     pattern:  /
     defaults: { _controller: BlogBundle:Blog:index }
 blog_article_voir:
-    pattern:  /article/voir
+    pattern:  /article/voir/{$id}
     defaults: { _controller: BlogBundle:Blog:voir }
+    requirements:
+        id:  \d+
 blog_article_ajouter:
     pattern:  /article/ajouter
     defaults: { _controller: BlogBundle:Blog:ajouter }
