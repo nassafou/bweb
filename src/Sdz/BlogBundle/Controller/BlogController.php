@@ -12,6 +12,20 @@ class BlogController extends Controller
     public function indexAction()
     {
         
+        //entity
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $article = new Article();
+        
+        $article  = $em->getRepository('BlogBundle:Article')->findAll();
+        
+        
+        
+        
+        return $this->render('BlogBundle:Blog:index.html.twig', array( 'articles' => $article ));
+        
+        
     }
     
     public function ajouterAction()
@@ -66,6 +80,12 @@ class BlogController extends Controller
     
     public function modifierAction($id)
     {
+        
+        
+        if($id === null )
+        {
+            throw NotFoundHttpException('Article non trouvé ');
+        }
         $message = '';
         // entity
         $em = $this->getDoctrine()->getManager();
@@ -77,9 +97,10 @@ class BlogController extends Controller
         //form
         $form = $this->createForm(new ArticleType, $article );
         
-        $repository = $this->getRepository('BlogBundle:Article')
-                           ->find($i);
+        $article = $em->getRepository('BlogBundle:Article')
+                           ->find($id);
         
+        $request = $this->get('request');
         // condition de validation
         
         if($request->getMethod() == 'POST')
@@ -98,14 +119,18 @@ class BlogController extends Controller
                 $message = 'Article bien enrégistré';
                 
                 return $this->render('BlogBundle:Blog:ajouter.html.twig', array('message' => $message,
-                                                                                'form' => $form->createView()));
+                                                                                'form' => $form->createView(),
+                                                                                'article' => $article));
                 
             }
             
         }
         
-        return $this->render('BlogBundle:Blog:ajouter.html.twig', array('form' => $form->createView(),
         
+       
+        return $this->render('BlogBundle:Blog:modifier.html.twig', array('article' => $article,
+                                                                         'form' => $form->createView(),
+                                                                         'id' => getId()));
         
         
     }
@@ -114,14 +139,47 @@ class BlogController extends Controller
     {
         
         
+        
+        //entity
+        $em = $this->getDoctrine()->getManager();
+        
+        // objet
+        //$article = new Article();
+        
+        //repository
+        $article = $em->getRepository('BlogBundle:Article')->find($id);
+        
+        if($article === null  )
+        {
+            throw NotFoundHttpException('Article non retrouvé ');
+        }
+        
+        
+        
+        return $this->render('BlogBundle:Blog:voir.html.twig', array('article' => $article
+                                                                      ));
+        
+        
+        
+    }
+    
+    public function formulaireAction()
+    {
+        
+        $article = new Article();
+        
+        $form = $this->createForm(new ArticleType(), $article );
+        
+        
+        return $this->render('BlogBundle:Blog:formulaire.html.twig', array('form' => $form->createView()));
+        
+        
     }
     
     public function supprimerAction()
     {
         
     }
-    
-    
     
     
 }

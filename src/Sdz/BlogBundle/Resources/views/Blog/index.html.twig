@@ -1,9 +1,9 @@
-{% extends '::base.html.twig'%}
 
 
 
 
-{% block body %}
+{% for article in articles %}
     
-    {{ message }}
-{% endblock %}
+    <a href="{{ path('blog_article_modifier', {'id': article.id }) }}">{{ article.titre }} </a><br />
+    
+{% endfor %}

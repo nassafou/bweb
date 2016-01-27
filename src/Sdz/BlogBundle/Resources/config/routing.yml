@@ -1,22 +1,30 @@
 blog_accueil:
-    pattern:  /
-    defaults: { _controller: BlogBundle:Blog:index }
+    pattern:  /{page}
+    defaults: { _controller: BlogBundle:Blog:index, page:1 }
+    requirements:
+        page:  \d*
 blog_article_voir:
-    pattern:  /article/voir/{$id}
+    pattern:  /article/voir/{id}
     defaults: { _controller: BlogBundle:Blog:voir }
     requirements:
         id:  \d+
+        
 blog_article_ajouter:
     pattern:  /article/ajouter
     defaults: { _controller: BlogBundle:Blog:ajouter }
+    
 blog_article_modifier:
-    pattern:  /article/modifier/{$id}
-    defaults: { _controller: BlogBundle:Blog:voir }
+    pattern:  /article/modifier/{id}
+    defaults: { _controller: BlogBundle:Blog:modifier }
     requirements:
         id:   \d+
+        
 blog_article_supprimer:
-    pattern:  /article/supprimer/{$id}
+    pattern:  /article/supprimer/{id}
     defaults: { _controller: BlogBundle:Blog:voir }
     requirements:
         id:     \d+
+blog_article_formulaire:
+    pattern:  /article/formulaire
+    defaults: { _controller: BlogBundle:Blog:formulaire }
 

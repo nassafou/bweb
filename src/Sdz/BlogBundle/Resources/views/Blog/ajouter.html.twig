@@ -1,10 +1,12 @@
-{{ message }}
+{% extends '::base.html.twig'%}
 
-<form action="" method="POST">
-    
-    {{ form_widget(form) }}
-    
-    {{ form_rest(form) }}
-    
-    <input type="submit" value="Valider" />
-</form>
+
+
+
+
+{% block body %}
+    {{ message }}
+
+     {% include"BlogBundle:Blog.formulaire.html.twig"%}
+     
+ {% endblock %}
