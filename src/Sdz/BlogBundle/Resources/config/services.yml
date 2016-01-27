@@ -5,3 +5,35 @@ services:
 #    blog.example:
 #        class: %blog.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]
+    sdz_blog.antispam:
+          class:      Sdz\BlogBundle\Antispam\SdzAntispam
+          arguments:  [@mailer, 3] 
+          calls:
+             -  [setLocale, [ %locale% ]]
+          tags:
+             -   {name: twig.extension }
+    sdzblog.validator.antiflood:
+      #Nom du service 
+          class: Sdz\BlogBundle\Validator\AntiFloodValidator
+      #La classe du service, Ici déja crée
+          arguments: [@request, @doctrine.orm.entity_manager]
+      # Les données qu'on inject au service : la requete et l'entity manager
+          scope: request
+      # Comme on injecte la requete on doit préciser ve scope
+          tags:
+             -   { name: validator.constraint_validator, alias: sdzblog_antiflood }
+      #C'est avec l'alias qu'on retrouvera le service
+  
+    sdz_blog.ckeditor:
+        class: Sdz\BlogBundle\Form\Type\CkeditorType
+        tags:
+           - { name: form.type, alias: ckeditor }
+    sdzblog.beta_listener:
+        class: Sdz\BlogBundle\Beta\BetaListener
+        arguments:     ["2016-1-30"]
+        tags:
+          -            { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+           
+           
+           
+           
