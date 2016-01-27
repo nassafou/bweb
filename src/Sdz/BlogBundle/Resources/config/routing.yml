@@ -1,6 +1,6 @@
 blog_accueil:
-    pattern:  /{page}
-    defaults: { _controller: BlogBundle:Default:index }
+    pattern:  /
+    defaults: { _controller: BlogBundle:Blog:index }
 blog_article_voir:
     pattern:  /article/voir
     defaults: { _controller: BlogBundle:Blog:voir }
