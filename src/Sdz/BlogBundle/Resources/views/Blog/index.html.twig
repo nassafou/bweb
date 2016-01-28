@@ -1,9 +1,11 @@
+{% extends 'BlogBundle::layout.html.twig'%}
 
 
+{% block title %}
+   Accueil- {{ parent() }}
+    {% endblock%}
 
+{% block blog_body %}
+    {% include "BlogBundle:Blog:article.html.twig"%}
 
-{% for article in articles %}
-    
-    <a href="{{ path('blog_article_modifier', {'id': article.id }) }}">{{ article.titre }} </a><br />
-    
-{% endfor %}
+{% endblock %}
