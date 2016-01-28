@@ -27,4 +27,30 @@ class ArticleRepository extends EntityRepository
         
     }
     
+    public function getArticles($nombreParPage, $Page)
+    {
+        // On déplace la vérification du numéro de page dans cetteméthode
+   if ($page < 1) {
+            throw new \InvalidArgumentException('L\'argument $page ne peut être inférieur à 1 (valeur : "'.$page.'").');
+              }
+         // La construction de la requête reste inchangée
+      $query = $this->createQueryBuilder('a')
+          ->leftJoin('a.image', 'i')
+          ->addSelect('i')
+          ->leftJoin('a.categories', 'cat')
+          ->addSelect('cat')
+          ->orderBy('a.date', 'DESC')
+          ->getQuery();
+        // On définit l'article à partir duquel commencer la liste
+        $query->setFirstResult(($page-1) * $nombreParPage)
+// Ainsi que le nombre d'articles à afficher
+             ->setMaxResults($nombreParPage);
+// Enfin, on retourne l'objet Paginator correspondant à larequête construite
+// (n'oubliez pas le use correspondant en début de fichier)
+      return new Paginator($query);
+    }
+    
+    
+    
+    
 }

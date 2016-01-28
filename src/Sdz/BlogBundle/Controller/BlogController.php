@@ -6,82 +6,55 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sdz\BlogBundle\Form\ArticleType;
 
 use Sdz\BlogBundle\Entity\Article;
+use Symfony\Component\HttpFoundation\Response;
 
 class BlogController extends Controller
 {
     public function indexAction()
     {
-        
         //entity
-        
-        $em = $this->getDoctrine()->getManager();
-        
-        $article = new Article();
-        
-        $article  = $em->getRepository('BlogBundle:Article')->findAll();
-        
-        
-        
-        
-        return $this->render('BlogBundle:Blog:index.html.twig', array( 'articles' => $article ));
-        
-        
+        $em = $this->getDoctrine()->getManager();   
+        //$article = new Article();
+        $article  = $em->getRepository('BlogBundle:Article')
+                       ->getArticle(3, $page);
+        return $this->render('BlogBundle:Blog:index.html.twig', array( 'articles' => $article,
+                                                                      'page'  =>  $page,
+                                                                      'nombrePage' => ceil(count($articles)/3)
+                                                                      ));
     }
     
     public function ajouterAction()
     {
-        
         $message = '';
         // entity
-        $em = $this->getDoctrine()->getManager();
-        
+        $em = $this->getDoctrine()->getManager();   
         // objet
         $article = new Article();
-        
-        
         //form
         $form = $this->createForm(new ArticleType, $article );
-        
         $request = $this->get('request');
-        
         // condition de validation
-        
         if($request->getMethod() == 'POST')
         {
             // lier le formulaire et la requete
             $form->bind($request);
-            
             // vérification de la validité des données
-            
             if($form->isValid())
             {
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($article);
                 $em->flush();
-                
                 $message = 'Article bien enrégistré';
-                
                 return $this->render('BlogBundle:Blog:ajouter.html.twig', array('message' => $message,
-                                                                                'form' => $form->createView()));
-                
+                                                                                'form' => $form->createView()));   
             }
-            
         }
-        
         return $this->render('BlogBundle:Blog:ajouter.html.twig', array('form' => $form->createView(),
                                                                         'message' => $message));
-        
-        
-        
-        
-        
-        
     }
     
     public function modifierAction($id)
     {
-        
-        
         if($id === null )
         {
             throw NotFoundHttpException('Article non trouvé ');
@@ -89,88 +62,53 @@ class BlogController extends Controller
         $message = '';
         // entity
         $em = $this->getDoctrine()->getManager();
-        
         // objet
-        $article = new Article();
-        
-        
+         $article = $em->getRepository('BlogBundle:Article')->find($id);
+        //$article = new Article();   
         //form
         $form = $this->createForm(new ArticleType, $article );
-        
-        $article = $em->getRepository('BlogBundle:Article')
-                           ->find($id);
-        
         $request = $this->get('request');
         // condition de validation
-        
         if($request->getMethod() == 'POST')
         {
             // lier le formulaire et la requete
             $form->bind($request);
-            
             // vérification de la validité des données
-            
             if($form->isValid())
             {
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($article);
                 $em->flush();
-                
                 $message = 'Article bien enrégistré';
-                
-                return $this->render('BlogBundle:Blog:ajouter.html.twig', array('message' => $message,
+                return $this->redirect(generateUrl('BlogBundle:Blog:ajouter.html.twig', array('message' => $message,
                                                                                 'form' => $form->createView(),
-                                                                                'article' => $article));
-                
+                                                                                'article' => $article)));
             }
-            
         }
-        
-        
-       
         return $this->render('BlogBundle:Blog:modifier.html.twig', array('article' => $article,
                                                                          'form' => $form->createView(),
-                                                                         'id' => getId()));
-        
-        
+                                                                         ));
     }
-    
     public function voirAction($id)
     {
-        
-        
-        
-        //entity
-        $em = $this->getDoctrine()->getManager();
-        
+       //entity
+        $em = $this->getDoctrine()->getManager();    
         // objet
         //$article = new Article();
-        
         //repository
         $article = $em->getRepository('BlogBundle:Article')->find($id);
-        
         if($article === null  )
         {
             throw NotFoundHttpException('Article non retrouvé ');
         }
-        
-        
-        
         return $this->render('BlogBundle:Blog:voir.html.twig', array('article' => $article
-                                                                      ));
-        
-        
-        
+                                                                      ));    
     }
     
     public function formulaireAction()
     {
-        
-        $article = new Article();
-        
+        $article = new Article();   
         $form = $this->createForm(new ArticleType(), $article );
-        
-        
         return $this->render('BlogBundle:Blog:formulaire.html.twig', array('form' => $form->createView()));
         
         
@@ -179,6 +117,13 @@ class BlogController extends Controller
     public function supprimerAction()
     {
         
+    }
+    
+    public function menuAction($nombre)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $article = $em->getRepository('BlogBundle:Article')->rfind();
+        return $this->render('BlogBundle:Blog:menu.html.twig', array('listes_articles' => $article));
     }
     
     
