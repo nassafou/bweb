@@ -12,4 +12,19 @@ use Doctrine\ORM\EntityRepository;
  */
 class ArticleRepository extends EntityRepository
 {
+    
+    // Fonction pour recupérer les derniers articles
+    public function rfind()
+    {
+        $qb = $this->_em->createQueryBuilder();
+        
+        $qb->select('a')
+           ->from('BlogBundle:Article', 'a')
+           ->orderBy('a.date', 'DESC');
+                  
+        return  $qb->getQuery()
+                    ->getResult();
+        
+    }
+    
 }
