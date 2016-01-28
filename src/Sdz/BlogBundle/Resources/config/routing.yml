@@ -8,6 +8,22 @@ blog_article_voir:
     defaults: { _controller: BlogBundle:Blog:voir }
     requirements:
         id:  \d+
+
+blog_article_menu:
+    pattern:  /article/menu/
+    defaults: { _controller: BlogBundle:Blog:menu }
+
+blog_article_test:
+    pattern:  /article/test/
+    defaults: { _controller: BlogBundle:Blog:test }
+
+blog_article_voir_slug:
+    pattern:  /article/voir/{annee}/{slug}.{format}
+    defaults: { _controller: BlogBundle:Blog:voirSlug }
+    requirements:
+        annee: \d{4}
+        format: html|xml
+    
         
 blog_article_ajouter:
     pattern:  /article/ajouter

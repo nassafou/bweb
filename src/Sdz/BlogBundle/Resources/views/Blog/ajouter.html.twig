@@ -1,12 +1,21 @@
-{% extends '::base.html.twig'%}
+{% extends 'BlogBundle::layout.html.twig' %}
 
 
+{% block title %}
+   ajouter un article - {{ parent() }}
+{%endblock %}
 
 
-
-{% block body %}
+{% block blog_body %}
+    <h1>Ajouter un article</h1>
     {{ message }}
 
-     {% include"BlogBundle:Blog.formulaire.html.twig"%}
+     {% include"BlogBundle:Blog:formulaire.html.twig" %}
      
+     <p>
+        <a href="{{ path('blog_accueil') }}" class="btn">
+            <i class="icon-chevron-left"></i>
+            Retour à l' article
+        </a>
+     </p>
  {% endblock %}
