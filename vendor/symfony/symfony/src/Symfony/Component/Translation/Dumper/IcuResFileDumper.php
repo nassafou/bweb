@@ -21,7 +21,7 @@ use Symfony\Component\Translation\MessageCatalogue;
 class IcuResFileDumper implements DumperInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function dump(MessageCatalogue $messages, $options = array())
     {
@@ -30,12 +30,12 @@ class IcuResFileDumper implements DumperInterface
         }
 
         // save a file for each domain
+        $file = $messages->getLocale().'.'.$this->getExtension();
         foreach ($messages->getDomains() as $domain) {
-            $file = $messages->getLocale().'.'.$this->getExtension();
             $path = $options['path'].'/'.$domain.'/';
 
-            if (!file_exists($path)) {
-                mkdir($path);
+            if (!is_dir($path) && !@mkdir($path) && !is_dir($path)) {
+                throw new \RuntimeException(sprintf('File Dumper was not able to create directory "%s"', $path));
             }
 
             // backup
@@ -49,7 +49,7 @@ class IcuResFileDumper implements DumperInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function format(MessageCatalogue $messages, $domain = 'messages')
     {
@@ -102,11 +102,7 @@ class IcuResFileDumper implements DumperInterface
             1, 4, 0, 0              // Unicode version
         );
 
-        $output = $header
-               .$root
-               .$data;
-
-        return $output;
+        return $header.$root.$data;
     }
 
     private function writePadding($data)
@@ -120,13 +116,11 @@ class IcuResFileDumper implements DumperInterface
 
     private function getPosition($data)
     {
-        $position = (strlen($data) + 28) / 4;
-
-        return $position;
+        return (strlen($data) + 28) / 4;
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function getExtension()
     {

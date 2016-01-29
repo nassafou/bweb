@@ -17,7 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
- * A console command for retrieving information about routes
+ * A console command for retrieving information about routes.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Tobias Schultze <http://tobion.de>
@@ -51,7 +51,7 @@ class RouterDebugCommand extends ContainerAwareCommand
                 new InputArgument('name', InputArgument::OPTIONAL, 'A route name'),
             ))
             ->setDescription('Displays current routes for an application')
-            ->setHelp(<<<EOF
+            ->setHelp(<<<'EOF'
 The <info>%command.name%</info> displays the configured routes:
 
   <info>php %command.full_name%</info>
@@ -99,9 +99,9 @@ EOF
             $maxHost = max($maxHost, strlen($host));
         }
 
-        $format  = '%-'.$maxName.'s %-'.$maxMethod.'s %-'.$maxScheme.'s %-'.$maxHost.'s %s';
-        $formatHeader  = '%-'.($maxName + 19).'s %-'.($maxMethod + 19).'s %-'.($maxScheme + 19).'s %-'.($maxHost + 19).'s %s';
-        $output->writeln(sprintf($formatHeader, '<comment>Name</comment>', '<comment>Method</comment>',  '<comment>Scheme</comment>', '<comment>Host</comment>', '<comment>Path</comment>'));
+        $format = '%-'.$maxName.'s %-'.$maxMethod.'s %-'.$maxScheme.'s %-'.$maxHost.'s %s';
+        $formatHeader = '%-'.($maxName + 19).'s %-'.($maxMethod + 19).'s %-'.($maxScheme + 19).'s %-'.($maxHost + 19).'s %s';
+        $output->writeln(sprintf($formatHeader, '<comment>Name</comment>', '<comment>Method</comment>', '<comment>Scheme</comment>', '<comment>Host</comment>', '<comment>Path</comment>'));
 
         foreach ($routes as $name => $route) {
             $method = $route->getMethods() ? implode('|', $route->getMethods()) : 'ANY';
