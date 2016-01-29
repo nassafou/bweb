@@ -4,18 +4,13 @@
 {% block title %}
    Modifier un article - {{ parent() }}
 {%endblock %}
-
-
 {% block blog_body %}
     <h1>modifier un article</h1>
-
-
      {% include"BlogBundle:Blog:formulaire.html.twig" %}
-     
      <p>
         <a href="{{ path('blog_article_voir', {'id': article.id }) }}" class="btn">
             <i class="icon-chevron-left"></i>
             Retour à l' article
         </a>
      </p>
- {% endblock %}
+{% endblock %}

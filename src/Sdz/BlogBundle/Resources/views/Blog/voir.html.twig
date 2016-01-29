@@ -1,9 +1,7 @@
 {% extends "BlogBundle::layout.html.twig" %}
-
 {% block title %}
     Lecture d'un article - {{ parent () }}
 {% endblock %}
-
 {% block blog_body %}
     <h2>{{ article.titre }}</h2>
     <i>Par {{ article.auteur }}, le {{ article.date | date('d/m/Y')}} </i>

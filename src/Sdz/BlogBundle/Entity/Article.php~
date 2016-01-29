@@ -13,6 +13,14 @@ use Doctrine\ORM\Mapping as ORM;
 class Article
 {
     /**
+     *@ORM\OneToOne(targetEntity="Sdz\BlogBundle\Entity\Image", cascade={"persist"})
+     */
+    private $image;
+    /**
+     *@ORM\ManyToMany(targetEntity="Sdz\BlogBundle\Entity\Categorie", cascade={"persist"})
+     */
+    private $categories;
+    /**
      * @var integer
      *
      * @ORM\Column(name="id", type="integer")
@@ -150,5 +158,45 @@ class Article
     public function getContenu()
     {
         return $this->contenu;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add categories
+     *
+     * @param \Sdz\BlogBundle\Entity\Categorie $categories
+     * @return Article
+     */
+    public function addCategorie(\Sdz\BlogBundle\Entity\Categorie $categories)
+    {
+        $this->categories[] = $categories;
+    
+        return $this;
+    }
+
+    /**
+     * Remove categories
+     *
+     * @param \Sdz\BlogBundle\Entity\Categorie $categories
+     */
+    public function removeCategorie(\Sdz\BlogBundle\Entity\Categorie $categories)
+    {
+        $this->categories->removeElement($categories);
+    }
+
+    /**
+     * Get categories
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCategories()
+    {
+        return $this->categories;
     }
 }

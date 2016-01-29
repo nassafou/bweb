@@ -1,10 +1,9 @@
 {% extends 'BlogBundle::layout.html.twig' %}
 {% block title %}
-  {# Accueil -{{ parent() }} #}
+   Accueil -{{ parent() }} 
 {% endblock%}
-
 {% block blog_body %}
-    {% include "BlogBundle:Blog:article.html.twig" %}
+    {% include "BlogBundle:Blog:article.html.twig" %} 
     <div class="pagination">
       <ul>
       {# On utilise la fonction range(a, b) qui crée un tableau de valeurs entre a et b #}

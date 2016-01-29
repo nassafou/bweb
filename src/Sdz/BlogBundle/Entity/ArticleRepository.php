@@ -3,6 +3,7 @@
 namespace Sdz\BlogBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * ArticleRepository
@@ -27,7 +28,7 @@ class ArticleRepository extends EntityRepository
         
     }
     
-    public function getArticles($nombreParPage, $Page)
+    public function getArticles($nombreParPage, $page)
     {
         // On déplace la vérification du numéro de page dans cetteméthode
    if ($page < 1) {
