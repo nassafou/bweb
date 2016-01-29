@@ -167,8 +167,6 @@ class PhpMatcherDumperTest extends \PHPUnit_Framework_TestCase
         $route1 = new Route('/route1', array(), array(), array(), 'a.example.com');
         $collection1->add('route1', $route1);
 
-        $collection2 = new RouteCollection();
-
         $route2 = new Route('/c2/route2', array(), array(), array(), 'a.example.com');
         $collection1->add('route2', $route2);
 
@@ -255,7 +253,7 @@ class PhpMatcherDumperTest extends \PHPUnit_Framework_TestCase
         return array(
            array($collection, 'url_matcher1.php', array()),
            array($redirectCollection, 'url_matcher2.php', array('base_class' => 'Symfony\Component\Routing\Tests\Fixtures\RedirectableUrlMatcher')),
-           array($rootprefixCollection, 'url_matcher3.php', array())
+           array($rootprefixCollection, 'url_matcher3.php', array()),
         );
     }
 }

@@ -28,20 +28,20 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
     public function testNormalizeNoMatch()
     {
         $this->serializer = new Serializer(array($this->getMock('Symfony\Component\Serializer\Normalizer\CustomNormalizer')));
-        $this->serializer->normalize(new \stdClass, 'xml');
+        $this->serializer->normalize(new \stdClass(), 'xml');
     }
 
     public function testNormalizeTraversable()
     {
         $this->serializer = new Serializer(array(), array('json' => new JsonEncoder()));
-        $result = $this->serializer->serialize(new TraversableDummy, 'json');
+        $result = $this->serializer->serialize(new TraversableDummy(), 'json');
         $this->assertEquals('{"foo":"foo","bar":"bar"}', $result);
     }
 
     public function testNormalizeGivesPriorityToInterfaceOverTraversable()
     {
-        $this->serializer = new Serializer(array(new CustomNormalizer), array('json' => new JsonEncoder()));
-        $result = $this->serializer->serialize(new NormalizableTraversableDummy, 'json');
+        $this->serializer = new Serializer(array(new CustomNormalizer()), array('json' => new JsonEncoder()));
+        $result = $this->serializer->serialize(new NormalizableTraversableDummy(), 'json');
         $this->assertEquals('{"foo":"normalizedFoo","bar":"normalizedBar"}', $result);
     }
 
@@ -51,7 +51,7 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
     public function testNormalizeOnDenormalizer()
     {
         $this->serializer = new Serializer(array(new TestDenormalizer()), array());
-        $this->assertTrue($this->serializer->normalize(new \stdClass, 'json'));
+        $this->assertTrue($this->serializer->normalize(new \stdClass(), 'json'));
     }
 
     /**
@@ -71,6 +71,50 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
         $this->serializer = new Serializer(array(new TestNormalizer()), array());
         $data = array('title' => 'foo', 'numbers' => array(5, 3));
         $this->assertTrue($this->serializer->denormalize(json_encode($data), 'stdClass', 'json'));
+    }
+
+    public function testNormalizeWithSupportOnData()
+    {
+        $normalizer1 = $this->getMock('Symfony\Component\Serializer\Normalizer\NormalizerInterface');
+        $normalizer1->method('supportsNormalization')
+            ->willReturnCallback(function ($data, $format) {
+                return isset($data->test);
+            });
+        $normalizer1->method('normalize')->willReturn('test1');
+
+        $normalizer2 = $this->getMock('Symfony\Component\Serializer\Normalizer\NormalizerInterface');
+        $normalizer2->method('supportsNormalization')
+            ->willReturn(true);
+        $normalizer2->method('normalize')->willReturn('test2');
+
+        $serializer = new Serializer(array($normalizer1, $normalizer2));
+
+        $data = new \stdClass();
+        $data->test = true;
+        $this->assertEquals('test1', $serializer->normalize($data));
+
+        $this->assertEquals('test2', $serializer->normalize(new \stdClass()));
+    }
+
+    public function testDenormalizeWithSupportOnData()
+    {
+        $denormalizer1 = $this->getMock('Symfony\Component\Serializer\Normalizer\DenormalizerInterface');
+        $denormalizer1->method('supportsDenormalization')
+            ->willReturnCallback(function ($data, $type, $format) {
+                return isset($data['test1']);
+            });
+        $denormalizer1->method('denormalize')->willReturn('test1');
+
+        $denormalizer2 = $this->getMock('Symfony\Component\Serializer\Normalizer\DenormalizerInterface');
+        $denormalizer2->method('supportsDenormalization')
+            ->willReturn(true);
+        $denormalizer2->method('denormalize')->willReturn('test2');
+
+        $serializer = new Serializer(array($denormalizer1, $denormalizer2));
+
+        $this->assertEquals('test1', $serializer->denormalize(array('test1' => true), 'test'));
+
+        $this->assertEquals('test2', $serializer->denormalize(array(), 'test'));
     }
 
     public function testSerialize()
