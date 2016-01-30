@@ -3,11 +3,21 @@
     Lecture d'un article - {{ parent () }}
 {% endblock %}
 {% block blog_body %}
-    <h2>{{ article.titre }}</h2>
-    <i>Par {{ article.auteur }}, le {{ article.date | date('d/m/Y')}} </i>
-    <div class="well">
-       {{ article.contenu }}       
-    </div>
+   
+    <h2>
+      
+      {# On vérifie qu'une image est bien associée à l'article  #}
+    {% if article.image is not null %}
+        <img src="{{ asset(article.image.url) }}" alt="{{ article.image.alt }}"/>
+    {% endif %}
+      
+      
+      {{ article.titre }}
+    </h2>
+         <i>Par {{ article.auteur }}, le {{ article.date | date('d/m/Y')}} </i>
+            <div class="well">
+              {{ article.contenu }}       
+           </div>
     <p>
         <a href="{{ path('blog_accueil') }}" class="btn">
             <i class="icon-chevron-left"></i>
