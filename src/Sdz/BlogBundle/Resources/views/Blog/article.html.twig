@@ -1,33 +1,15 @@
-{% set accueil = accueil|default(false) %}
-<h2>
-    {# On vérifie qu'une image est bien associée à l'article  #}
-    {% if article.image is not null %}
-        <img src="{{ asset(article.image.webpath) }}" alt="{{ article.image.alt }}"/>
-    {% endif %}
-    
-    {# Si on est sur la page d'accueil, on fait un lien vers l'article, sinon non #}
-    {% if accueil %}
-       <a href="{{ path('blog_article_voir', {'id': article.id}) }}">{{ article.titre }}</a>
-   {% else %}
-       {{ article.titre }}
-   {% endif %}
-   </h2>
-<i>
-    Le {{ article.date|date('d/m/Y') }}, par {{ article.auteur }}</i>
-<div class="well">
-    {{ article.contenu }}
-</div>
 
-{# On affiche les catégories éventuelles #}
-{% if article.categories.count > 0 %}
-    <div class="well well-small">
-        <p>
-            <i>
-                Catégories:
-                {% for catégorie in article.categories %}
-                    {{ categorie.nom }} {% if not loop.last %}, {% endif %}
-                {% endfor %}
-            </i>
-        </p>
-    </div>
-{% endif %}
+
+<h2>Liste des articles </h2>
+<ul>
+    
+{% for article in article %}
+    <li>
+    <a href="{{ path('blog_article_voir', {'id': article.id })}}">{{ article.titre }}</a>
+     par {{ article.auteur }} le {{ article.date | date('d/m/Y')}}
+      </li>
+    {% else %}
+        <li> Pas (encore !) d' articles </li>
+  {% endfor  %}
+  
+</ul>

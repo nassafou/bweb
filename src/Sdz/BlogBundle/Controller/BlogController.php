@@ -4,22 +4,28 @@ namespace Sdz\BlogBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sdz\BlogBundle\Form\ArticleType;
-
+use Sdz\BlogBundle\Entity\Image;
 use Sdz\BlogBundle\Entity\Article;
+use Sdz\BlogBundle\Entity\Categorie;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Component\HttpFoundation\Response;
 
 class BlogController extends Controller
 {
-    public function indexAction()
+    public function indexAction($page)
     {
+        if($page < 1)
+        
+        throw $this->createNotFoundException('Page inexistante (page = '.$page.')');
         //entity
         $em = $this->getDoctrine()->getManager();   
         //$article = new Article();
         $article  = $em->getRepository('BlogBundle:Article')
-                       ->getArticle(3, $page);
-        return $this->render('BlogBundle:Blog:index.html.twig', array( 'articles' => $article,
-                                                                      'page'  =>  $page,
-                                                                      'nombrePage' => ceil(count($articles)/3)
+                       ->getArticles(3, $page);
+        return $this->render('BlogBundle:Blog:index.html.twig', array( 'article' => $article,
+                                                                        'page'   => $page,
+                                                                    'nombrePage' => ceil(count($article)/3)
+                                                                      
                                                                       ));
     }
     
@@ -126,5 +132,9 @@ class BlogController extends Controller
         return $this->render('BlogBundle:Blog:menu.html.twig', array('listes_articles' => $article));
     }
     
+    public function traductionAction($name)
+    {
+        return $this->render('BlogBundle:Blog:traduction.html.twig', array('name' => $name ));
+    }
     
 }
