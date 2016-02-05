@@ -7,7 +7,6 @@
 {% block blog_body %}
     <h2>{{ article.titre }}</h2>
     <i>Par {{ article.auteur }}, le {{ article.date | date('d/m/Y')}} </i>
-    
     <div class="well">
        {{ article.contenu }}       
     </div>
@@ -20,13 +19,9 @@
             <i class="icon-edit"></i>
             Modifier l'article            
         </a>
-        
         <a href="{{path('blog_article_supprimer', {'id': article.id })}}" class="btn">
             <i class="icon-trash"></i>
             supprimer l'article            
         </a>
     </p>
-    
-    
-    
 {% endblock %}

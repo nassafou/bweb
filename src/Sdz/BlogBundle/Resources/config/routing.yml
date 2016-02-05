@@ -3,6 +3,7 @@ blog_accueil:
     defaults: { _controller: BlogBundle:Blog:index, page:1 }
     requirements:
         page:  \d*
+        
 blog_article_voir:
     pattern:  /article/voir/{id}
     defaults: { _controller: BlogBundle:Blog:voir }
@@ -40,6 +41,7 @@ blog_article_supprimer:
     defaults: { _controller: BlogBundle:Blog:voir }
     requirements:
         id:     \d+
+        
 blog_article_formulaire:
     pattern:  /article/formulaire
     defaults: { _controller: BlogBundle:Blog:formulaire }
